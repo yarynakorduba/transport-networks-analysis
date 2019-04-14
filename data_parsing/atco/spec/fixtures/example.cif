@@ -1,0 +1,30 @@
+ATCO-CIF0500Electronic Registration         MIA 4.20.18     20090915113809
+QLN700000001433Donegal Square East                             1 
+QBN700000001433  333935  373979                                                
+GS00001433 N                    Belfast Metro Ops                                 7000
+GR00001433Donegall Square East                                                                                7000
+QLN700000001627Great Northern Mall                             1 
+QBN700000001627  333575  373717                                                
+GS00001627 N                    Belfast Metro Ops                                 7000
+GR00001627Great Victoria Street                                                                               7000                                                                                      7000
+QPNTM  Translink Metro         Translink Metro                                                         
+QQ                                                                              
+ZLTMAO009AT05O
+ZD20091005        Monday to Friday                                                      FFFFF00
+ZSTMAO009A9A  City Centre - Conway                                                                                
+ZAN700000001433                                                P1W1T1
+ZAN700000001627                                                P1W1T1
+QSNTM  13974820091005        1111100  9A  9011  0               O
+ZJTMAO009A004  1 370     000CB   545     2237    C         FFFFF00L0
+QO7000000014330545   T1F0
+ZECH0      054500054500P0W0
+QI70000000162705460546B   T1F0
+ZECH0      054600054600P0W0
+QI70000000124806020602B   T1F0
+ZECH0      060200060200P0W0
+QI70000000125006030603B   T0F0
+ZECH0      060348060348P0W0
+QT7000000012520605   T1F0
+ZECH0      060500060500P0W0
+QVN0       Bus                     
+QHN20071226

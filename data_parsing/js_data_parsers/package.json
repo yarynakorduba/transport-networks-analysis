@@ -1,0 +1,11 @@
+{
+  "name": "js-data-helpers",
+  "version": "1.0.0",
+  "dependencies": {
+    "ramda": "^0.26.1",
+    "rxjs": "latest"
+  },
+  "devDependencies": {
+    "prettier": "^1.16.4"
+  }
+}

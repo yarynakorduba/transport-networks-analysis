@@ -1,0 +1,25 @@
+## ATCO-CIF
+Original Repository of the module: https://github.com/davidjrice/atco
+
+ATCO-CIF is the format of choice for UK public transport authorities. This is a ruby library that reads **.cif** files and gives you JSON back.
+
+* **Official spec:** [http://www.pti.org.uk/CIF/atco-cif-spec.pdf](http://www.pti.org.uk/CIF/atco-cif-spec.pdf)
+
+### USAGE
+
+Currently this library is under-development and has several things left to do before it is perfect (see the [todo.mdown](http://github.com/davidjrice/atco/blob/master/todo.mdown) list ).
+
+* clone this library
+* start an irb session
+* put the cif file in ./data (needs to change from being hardcoded)
+
+Code example, for more detailed internal api usage see the spec files.
+
+    gem install atco
+    irb
+    > require 'atco'
+    > require 'json'
+    > result = Atco.parse('filename.cif')
+    > File.write('new_filename.cif', result.to_json)
+
+    
