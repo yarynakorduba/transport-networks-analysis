@@ -10,6 +10,6 @@
 /data/lviv_parsed/*.csv filter=lfs diff=lfs merge=lfs -text
 /data/lviv_parsed/initial/*.json filter=lfs diff=lfs merge=lfs -text
 /data/lviv_parsed/processed/*.json filter=lfs diff=lfs merge=lfs -text
-/data/initial_data/* filter=lfs diff=lfs merge=lfs -text
+/data/initial_datasets/* filter=lfs diff=lfs merge=lfs -text
 /data/lviv_static_data/* filter=lfs diff=lfs merge=lfs -text
 

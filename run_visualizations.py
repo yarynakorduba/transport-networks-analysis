@@ -10,7 +10,7 @@ labels_to_plot=["RA", "$k$", "$k^i$", r"$C_{\beta}$", r"$C_{\beta}^i$"]
 #     c_space_random_attack = json.loads(c_space_random_attack_file.read())[0]
 # with open("points_for_plots/bristol_c_space_targeted_attack_by_degrees_initial.json", "r") as c_space_by_init_degrees_attack_file:
 #     c_space_degrees_init_attack = json.loads(c_space_by_init_degrees_attack_file.read())[0]
-# with open("points_for_plots/bristol_c_space_targeted_attack_by_degrees_recalculated.json", "r") as c_space_by_recalc_degrees_attack_file:
+# with open("points_for_plots/bristol_c_space_t argeted_attack_by_degrees_recalculated.json", "r") as c_space_by_recalc_degrees_attack_file:
 #     c_space_degrees_recalc_attack = json.loads(c_space_by_recalc_degrees_attack_file.read())[0]
 # with open("points_for_plots/bristol_c_space_targeted_attack_by_betweenness_initial.json","r") as c_space_by_init_betweenness_attack_file:
 #     c_space_betweenness_init_attack = json.loads(c_space_by_init_betweenness_attack_file.read())[0]
