@@ -1,12 +1,4 @@
 const turf = require("@turf/turf");
-const fetch = require("node-fetch");
-
-const getPolygonOfBristol = () =>
-    fetch(
-        "https://mapit.mysociety.org/area/2561.geojson"
-    )
-        .then(res => res.json())
-        .catch(err => console.log(err));
 
 const filterPointersToRedundantStops = (geoJsonStopsData) => {
     const existingStops = geoJsonStopsData.features.map(stop => stop.properties.id)
@@ -15,10 +7,11 @@ const filterPointersToRedundantStops = (geoJsonStopsData) => {
                     stop.properties.connections.filter(stopId => existingStops.includes(stopId))}}))
 }
 
-const cropGeoDataToPolygon = async (geoJsonStopsData) => {
-    const polygonToCrop = await getPolygonOfBristol()
+const cropGeoDataToPolygon = async (geoJsonStopsData, getPolygon) => {
+    const polygonToCrop = await getPolygon()
+    if (!polygonToCrop) throw Error("No polygon specified")
+
     const dataWithinPolygon = turf.pointsWithinPolygon(geoJsonStopsData, polygonToCrop)
-    console.log(dataWithinPolygon.type)
     return {...dataWithinPolygon, features: filterPointersToRedundantStops(dataWithinPolygon)}
 }
 

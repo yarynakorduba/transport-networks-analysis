@@ -3,9 +3,14 @@ const fs = require("fs")
 const turf = require("@turf/turf")
 const { map, flatMap } = require("rxjs/operators")
 const readFilePromise = require('./readFilePromise')
-const cropDataInPolygon = require("./cropDataInPolygon.js")
+const cropDataInPolygon = require("./cropDataInPolygon")
+const {getPolygonOfLviv, getPolygonOfBristol} = require('./fetchPolygons')
 
 const VEHICLE_TYPE = "Bus"
+const CITY = "bristol"
+const CLUSTER_RADIUS = 0.03 // km
+
+const GET_POLYGON = CITY === "lviv" ? getPolygonOfLviv : CITY === "bristol" ? getPolygonOfBristol : null
 
 const parseJsonToGeojson = (data) => ({type: "FeatureCollection", features: data.map(stop => ({
   type: "Feature",
@@ -15,7 +20,7 @@ const parseJsonToGeojson = (data) => ({type: "FeatureCollection", features: data
 
 const convertGeojsonToJson = data => data.features.map(stop => stop.properties)
 
-const clusterWithDbscan = (geoJsonStopsData) => turf.clustersDbscan(geoJsonStopsData, 0.1,
+const clusterWithDbscan = (geoJsonStopsData, km) => turf.clustersDbscan(geoJsonStopsData, km,
   { mutate: true, minPoints: 2 })
 
 const filterRedundantStopsFromRoutes = (stopsData, routesData) => {
@@ -27,26 +32,28 @@ const filterRedundantStopsFromRoutes = (stopsData, routesData) => {
 
 
 forkJoin(
-from(readFilePromise("../../data/bristol_parsed/initial/bristol" + VEHICLE_TYPE + "Stops.json")).pipe(
+from(readFilePromise("../../data/"+ CITY +"_parsed/initial/" + CITY + VEHICLE_TYPE + "Stops.json")).pipe(
   map(JSON.parse),
   map(parseJsonToGeojson),
-  flatMap((stops) => from(cropDataInPolygon(stops))),
-  map(clusterWithDbscan),
+  flatMap((stops) => from(cropDataInPolygon(stops, GET_POLYGON))),
+  map(stops => clusterWithDbscan(stops, CLUSTER_RADIUS)),
   map(convertGeojsonToJson)
   ),
-  from(readFilePromise("../../data/bristol_parsed/initial/bristol" + VEHICLE_TYPE + "Routes.json")).pipe(
-    map(JSON.parse)),
+  from(readFilePromise("../../data/"+CITY+"_parsed/initial/" + CITY + VEHICLE_TYPE + "Routes.json")).pipe(
+    map(JSON.parse),
+    ),
   )
   .subscribe(
     ([stops, routes]) => {
-    fs.writeFile("../../data/bristol_parsed/processed/bristolStops" + VEHICLE_TYPE +"Processed.json",
+    fs.writeFile("../../data/"+ CITY +"_parsed/processed/"+ CITY + VEHICLE_TYPE +"StopsProcessed"
+    + CLUSTER_RADIUS * 1000 +"m.json",
       JSON.stringify(stops), (err) => {
       if (err) throw err
       console.log("The stops file has been saved!")
     })
-      fs.writeFile("../../data/bristol_parsed/processed/bristolRoutes" + VEHICLE_TYPE +"Processed.json",
-        JSON.stringify(
-          filterRedundantStopsFromRoutes(stops, routes)), (err) => {
+      fs.writeFile("../../data/"+CITY+"_parsed/processed/"+ CITY + VEHICLE_TYPE +"JourneysProcessed"
+      + CLUSTER_RADIUS * 1000 +"m.json",
+        JSON.stringify(filterRedundantStopsFromRoutes(stops, routes)), (err) => {
         if (err) throw err
         console.log("The routes file has been saved!")
       })
