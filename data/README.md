@@ -35,3 +35,16 @@ stops from the properties
 \<city>StopsBoundedClustered.geojson
 7. Convert \<city>StopsBoundedClustered.geojson 
 to  \<city>StopsBoundedParsed.json
+
+___
+
+### Lviv boundaries
+https://github.com/kameristov/lvivmaps
+
+### Bristol boundaries
+https://mapit.mysociety.org/area/2561.geojson 
+
+
+To find city boundaries you can also use 
+https://www.openstreetmap.org
+ 
