@@ -15,14 +15,20 @@ def plot_lin_lin(points, x_label="", y_label="", colors=DEFAULT_COLORS, labels=D
                 sequence = [[float(key) for key in points[ind].keys()], points[ind].values()]
             else:
                 sequence = points[ind]
-            if ind < len(points):
-                ax.scatter(*sequence, c=colors[ind], alpha=0.5, s=s, label=labels[ind])
+            if len(sequence[1]) == 0:
+                ax.axvline(x=sequence[0][0])
+            elif len(sequence[0]) == 0:
+                ax.axvline(y=sequence[1][0])
             else:
-                ax.scatter(*sequence, s=3)
+                ax.scatter(*sequence, c=colors[ind], alpha=0.5, s=s, label=labels[ind])
+
         ax.legend()
         plt.xlabel(x_label)
         plt.ylabel(y_label)
-        plt.savefig(figname)
+        if figname:
+            plt.savefig(figname)
+        else:
+            plt.show()
     else:
         print("No points were received")
 
@@ -76,7 +82,7 @@ def compute_areas_under_the_curve(sequences, city, space, delete_by=False, recal
         if isinstance(sequences[ind], dict):
             sequence = list(sequences[ind].values())
         results_sum += np.trapz(y=sequence, dx=0.01)
-    with open("results/RESILIENCE_AREA_CURVES.csv", "a+") as file:
+    with open("results_tables_clustered_at_30m/RESILIENCE_AREA_CURVES.csv", "a+") as file:
         result = results_sum / len(sequences)
         info_writer = csv.writer(file, delimiter=',', quotechar='"')
         info_writer.writerow([city, space, delete_by, recalculated, result])
