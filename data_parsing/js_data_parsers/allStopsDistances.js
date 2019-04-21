@@ -13,7 +13,7 @@ const CITY = "lviv"
 const GET_POLYGON = CITY === "lviv" ? getPolygonOfLviv : CITY === "bristol" ? getPolygonOfBristol : null
 
 
-const calculateDistances = (data) => R.compose(
+const calculateDistances = (data) => data && data.features && R.compose(
   R.filter(n => n !== 0),
   R.sort((a,b) => a-b),
   R.flatten,
@@ -32,7 +32,6 @@ const findStopsDistances = () => {
     map(calculateDistances)
   ).subscribe(
     (distances) => {
-      console.log(distances)
       fs.writeFile("../../data/"+ CITY +"_parsed/clustering_test/"+ CITY + VEHICLE_TYPE +"StopsDistances.json",
         JSON.stringify(distances), (err) => {
           if (err) throw err
@@ -41,4 +40,6 @@ const findStopsDistances = () => {
     })
 }
 
-findStopsDistances()
+//findStopsDistances()
+
+module.exports.calculateDistances = calculateDistances

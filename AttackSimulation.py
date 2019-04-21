@@ -5,13 +5,13 @@ from GraphSpaces import GraphSpaces
 
 
 class RandomNodeAttackSimulation:
-    def __init__(self, space, incoming_routes, all_routes, city):
-        self.simulation_info=city + "_" + space + "_space"
+    def __init__(self, space, incoming_routes, all_routes, info):
+        self.simulation_info=info
         self.space = GraphSpaces(incoming_routes, all_routes).get_graph(space)
         self.simulation_results = []
 
     def __str__(self):
-        return "Simulation results: " + str(self.simulation_results)
+        return "Simulation tables: " + str(self.simulation_results)
     
     def get_simulation_results(self):
         return self.simulation_results
@@ -94,5 +94,5 @@ class RandomNodeAttackSimulation:
                 self.simulation_results.append(targeted_att)
 
     def write_simulation_data_to_file(self):
-        with open("points_for_plots/" + self.simulation_info + ".json", "w") as file:
+        with open(self.simulation_info + ".json", "w") as file:
             json.dump(self.get_simulation_results(), file)

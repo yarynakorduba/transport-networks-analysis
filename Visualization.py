@@ -7,8 +7,9 @@ import numpy as np
 DEFAULT_COLORS = ["red", "blue", "orange", "brown", "green", "black", "pink"]
 
 
-def plot_lin_lin(points, x_label="", y_label="", colors=DEFAULT_COLORS, labels=DEFAULT_COLORS, figname="", s=6):
+def plot_lin_lin(points, x_label="", y_label="", colors=DEFAULT_COLORS, labels=None, figname="", s=6):
     if points:
+        plt.rcParams.update({'font.size': 12})
         fig, ax = plt.subplots()
         for ind in range(0, len(points)):
             if isinstance(points[ind], dict):
@@ -19,10 +20,13 @@ def plot_lin_lin(points, x_label="", y_label="", colors=DEFAULT_COLORS, labels=D
                 ax.axvline(x=sequence[0][0])
             elif len(sequence[0]) == 0:
                 ax.axvline(y=sequence[1][0])
-            else:
+            elif labels is not None:
                 ax.scatter(*sequence, c=colors[ind], alpha=0.5, s=s, label=labels[ind])
+                ax.legend()
+            else:
+                ax.scatter(*sequence, c=colors[ind], alpha=0.5, s=s)
 
-        ax.legend()
+
         plt.xlabel(x_label)
         plt.ylabel(y_label)
         if figname:
@@ -47,6 +51,7 @@ def plot_log_log(points, x_label="", y_label="", colors=DEFAULT_COLORS, labels=D
                 ax.scatter(*sequence, s=3)
         ax.set_yscale("log")
         ax.set_xscale("log")
+
         ax.legend()
         if ylim:
             plt.ylim(*ylim)
@@ -76,13 +81,13 @@ def plot_lin_log(points, x_label="", y_label="", s=6, ylim=None, xlim=None):
 # TODO: change dx to equal to step
 # IMPORTANT!!! THE DX VALUE DEPENDS ON THE STEP IN ATTACK SIMULATION!!!
 # CHANGE IT IF YOU CHANGE THE STEP!!!
-def compute_areas_under_the_curve(sequences, city, space, delete_by=False, recalculated=False):
+def compute_areas_under_the_curve(sequences, city, space, filepath, delete_by=False, recalculated=False):
     results_sum = 0
     for ind in range(0, len(sequences)):
         if isinstance(sequences[ind], dict):
             sequence = list(sequences[ind].values())
         results_sum += np.trapz(y=sequence, dx=0.01)
-    with open("results_tables_clustered_at_30m/RESILIENCE_AREA_CURVES.csv", "a+") as file:
+    with open(filepath, "a+") as file:
         result = results_sum / len(sequences)
         info_writer = csv.writer(file, delimiter=',', quotechar='"')
         info_writer.writerow([city, space, delete_by, recalculated, result])

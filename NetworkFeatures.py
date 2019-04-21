@@ -140,7 +140,19 @@ class NetworkFeatures:
         x = list(paths_quantities.keys())
         return [x, y]
 
-    def cumulative_node_distribution(self):
+    def shortest_path_distribution(self):
+        shortest_paths = dict(nx.shortest_path_length(self.graph))
+        paths_values = []
+        for element in list(shortest_paths.values()):
+            paths_values += list(element.values())
+        paths_quantities = {key: len(list(group)) for key, group in groupby(sorted(paths_values))}
+        paths_quantities_values = list(paths_quantities.values())
+        y = [paths_quantities_values[val] / sum(paths_quantities_values) \
+             for val in range(0, len(paths_quantities_values))]
+        x = list(paths_quantities.keys())
+        return [x, y]
+
+    def cumulative_degree_distribution(self):
         node_degrees = self.degree()
         values = set(map(lambda x: x[1], node_degrees))
         degrees_occurences_quantities = {x: len([y[0] for y in node_degrees if y[1] == x]) for x in values}
@@ -151,9 +163,14 @@ class NetworkFeatures:
         x = [val for val in degrees_occurences_quantities.keys()]
         return [x, y]
 
-    def shortest_paths(self):
-        shortest_paths = dict(nx.shortest_path_length(self.graph))
-        paths_values = []
-        for element in list(shortest_paths.values()):
-            paths_values += list(element.values())
-        paths_quantities = {str(key): len(list(group)) for key, group in groupby(sorted(paths_values))}
+    def degree_distribution(self):
+        node_degrees = self.degree()
+        values = set(map(lambda x: x[1], node_degrees))
+        degrees_occurences_quantities = {x: len([y[0] for y in node_degrees if y[1] == x]) for x in values}
+        degrees_occurences_values = list(degrees_occurences_quantities.values())
+        y = []
+        for val in range(0, len(degrees_occurences_values)):
+            y.append(degrees_occurences_values[val] / sum(degrees_occurences_values))
+        x = [val for val in degrees_occurences_quantities.keys()]
+        return [x, y]
+

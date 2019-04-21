@@ -9,8 +9,8 @@ const {convertJsonToGeojson, convertGeojsonToJson} = require('./jsonGeojsonConve
 
 
 const VEHICLE_TYPE = "All"
-const CITY = "lviv"
-let CLUSTER_RADIUS = 0.7 // km
+const CITY = "bristol"
+let CLUSTER_RADIUS = 0.04 // km
 
 const GET_POLYGON = CITY === "lviv" ? getPolygonOfLviv : CITY === "bristol" ? getPolygonOfBristol : null
 
@@ -27,7 +27,7 @@ const filterRedundantStopsFromRoutes = (stopsData, routesData) => {
 const processFile = () => forkJoin(
   from(readFilePromise("../../data/"+ CITY +"_parsed/initial/" + CITY + VEHICLE_TYPE + "Stops.json")).pipe(
     map(JSON.parse),
-    map(parseJsonToGeojson),
+    map(convertJsonToGeojson),
     flatMap((stops) => from(cropDataInPolygon(stops, GET_POLYGON))),
     map(stops => clusterWithDbscan(stops, CLUSTER_RADIUS)),
     map(convertGeojsonToJson)

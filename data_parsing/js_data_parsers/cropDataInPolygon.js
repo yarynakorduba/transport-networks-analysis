@@ -1,10 +1,11 @@
 const turf = require("@turf/turf");
+const R = require("ramda")
 
 const filterPointersToRedundantStops = (geoJsonStopsData) => {
     const existingStops = geoJsonStopsData.features.map(stop => stop.properties.id)
-    return geoJsonStopsData.features.map(stop =>
+    return R.uniq(geoJsonStopsData.features.map(stop =>
         ({...stop, properties: {...stop.properties, connections:
-                    stop.properties.connections.filter(stopId => existingStops.includes(stopId))}}))
+                    stop.properties.connections.filter(stopId => existingStops.includes(stopId))}})))
 }
 
 const cropGeoDataToPolygon = async (geoJsonStopsData, getPolygon) => {
