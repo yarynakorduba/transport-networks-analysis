@@ -78,17 +78,18 @@ def plot_lin_log(points, x_label="", y_label="", s=6, ylim=None, xlim=None):
         print("No points were received")
 
 
-# TODO: change dx to equal to step
-# IMPORTANT!!! THE DX VALUE DEPENDS ON THE STEP IN ATTACK SIMULATION!!!
-# CHANGE IT IF YOU CHANGE THE STEP!!!
+"""
+Finds the average area under the curve among array of sequences. Writes it to the file specified.
+"""
 def compute_areas_under_the_curve(sequences, city, space, filepath, delete_by=False, recalculated=False):
     results_sum = 0
     for ind in range(0, len(sequences)):
         if isinstance(sequences[ind], dict):
-            sequence = list(sequences[ind].values())
-        results_sum += np.trapz(y=sequence, dx=0.01)
+            sequence_y = list(sequences[ind].values())
+            sequence_x = [float(num) for num in list(sequences[ind].keys())]
+        results_sum += np.trapz(y=sequence_y, x=sequence_x)
     with open(filepath, "a+") as file:
-        result = results_sum / len(sequences)
+        result = round(results_sum / len(sequences), 3)
         info_writer = csv.writer(file, delimiter=',', quotechar='"')
         info_writer.writerow([city, space, delete_by, recalculated, result])
     return result
