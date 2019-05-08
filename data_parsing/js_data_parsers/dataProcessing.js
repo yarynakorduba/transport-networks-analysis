@@ -32,7 +32,7 @@ const processFile = () => forkJoin(
     map(stops => clusterWithDbscan(stops, CLUSTER_RADIUS)),
     map(convertGeojsonToJson)
   ),
-  from(readFilePromise("../../data/"+CITY+"_parsed/initial/" + CITY + VEHICLE_TYPE + "Routes.json")).pipe(
+  from(readFilePromise("../../data/"+CITY+"_parsed/processed/" + CITY + VEHICLE_TYPE + "UniqueRoutes.json")).pipe(
     map(JSON.parse),
   ),
 )
@@ -44,7 +44,7 @@ const processFile = () => forkJoin(
           if (err) throw err
           console.log("The stops file has been saved!")
         })
-      fs.writeFile("../../data/"+CITY+"_parsed/processed/"+ CITY + VEHICLE_TYPE +"JourneysProcessed"
+      fs.writeFile("../../data/"+CITY+"_parsed/processed/"+ CITY + VEHICLE_TYPE +"UniqueRoutesProcessed"
         + CLUSTER_RADIUS * 1000 +"m.json",
         JSON.stringify(filterRedundantStopsFromRoutes(stops, routes)), (err) => {
           if (err) throw err

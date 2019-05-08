@@ -64,7 +64,12 @@ class NetworkFeatures:
         return k
 
     def betweenness_centrality(self):
-        b_centrality = nx.betweenness_centrality(self.graph)
+        if not nx.is_connected(self.graph):
+            if not self.GCC:
+                self.build_GCC()
+            b_centrality = nx.betweenness_centrality(self.GCC)
+        else:
+            b_centrality = nx.betweenness_centrality(self.graph)
         return b_centrality
 
     def mean_degree(self, GCC=False):
@@ -129,39 +134,50 @@ class NetworkFeatures:
         return self.mean_square_degree() / self.mean_degree()
 
     def cumulative_shortest_path_distribution(self):
-        shortest_paths = dict(nx.shortest_path_length(self.graph))
+        if not nx.is_connected(self.graph):
+            if not self.GCC:
+                self.build_GCC()
+            shortest_paths = dict(nx.shortest_path_length(self.GCC))
+        else:
+            shortest_paths = dict(nx.shortest_path_length(self.graph))
         paths_values = []
         for element in list(shortest_paths.values()):
             paths_values += list(element.values())
-        paths_quantities = {key: len(list(group)) for key, group in groupby(sorted(paths_values))}
-        paths_quantities_values = list(paths_quantities.values())
-        y = [sum(paths_quantities_values[val:]) / sum(paths_quantities_values) \
-             for val in range(0, len(paths_quantities_values))]
-        x = list(paths_quantities.keys())
-        return [x, y]
+        paths_occurences_dict = {key: len(list(group)) for key, group in groupby(sorted(paths_values))}
+        paths_distribution = dict()
 
-    def shortest_path_distribution(self):
-        shortest_paths = dict(nx.shortest_path_length(self.graph))
-        paths_values = []
-        for element in list(shortest_paths.values()):
-            paths_values += list(element.values())
-        paths_quantities = {key: len(list(group)) for key, group in groupby(sorted(paths_values))}
-        paths_quantities_values = list(paths_quantities.values())
-        y = [paths_quantities_values[val] / sum(paths_quantities_values) \
-             for val in range(0, len(paths_quantities_values))]
-        x = list(paths_quantities.keys())
-        return [x, y]
+        for key in range(0, len(paths_occurences_dict)):
+            paths_distribution[key] = sum([paths_occurences_dict[index] for index in list(paths_occurences_dict.keys())
+                                                if index >= key]) / sum([paths_occurences_dict[ind] for ind in list(paths_occurences_dict.keys())])
+        return paths_distribution
 
     def cumulative_degree_distribution(self):
         node_degrees = self.degree()
         values = set(map(lambda x: x[1], node_degrees))
-        degrees_occurences_quantities = {x: len([y[0] for y in node_degrees if y[1] == x]) for x in values}
-        degrees_occurences_values = list(degrees_occurences_quantities.values())
-        y = []
-        for val in range(0, len(degrees_occurences_values)):
-            y.append(sum(degrees_occurences_values[val:]) / sum(degrees_occurences_values))
-        x = [val for val in degrees_occurences_quantities.keys()]
-        return [x, y]
+        degrees_occurences_dict = {x: len([y[0] for y in node_degrees if y[1] == x]) for x in values}
+        degrees_distribution_dict = dict()
+        for key in range(0, len(degrees_occurences_dict)):
+            degrees_distribution_dict[key] = sum([degrees_occurences_dict[index] for index in list(degrees_occurences_dict.keys())
+                                                if index >= key]) / sum([degrees_occurences_dict[ind] for ind in list(degrees_occurences_dict.keys())])
+        return degrees_distribution_dict
+
+    def shortest_path_distribution(self):
+        if not nx.is_connected(self.graph):
+            if not self.GCC:
+                self.build_GCC()
+            shortest_paths = dict(nx.shortest_path_length(self.GCC))
+        else:
+            shortest_paths = dict(nx.shortest_path_length(self.graph))
+        paths_values = []
+        for element in list(shortest_paths.values()):
+            paths_values += list(element.values())
+        paths_occurences_dict = {key: len(list(group)) for key, group in groupby(sorted(paths_values))}
+        paths_distribution = dict()
+
+        for key in range(0, len(paths_occurences_dict)):
+            paths_distribution[key] = paths_occurences_dict[key] / sum([paths_occurences_dict[ind]
+                                                                        for ind in list(paths_occurences_dict.keys())])
+        return paths_distribution
 
     def degree_distribution(self):
         node_degrees = self.degree()

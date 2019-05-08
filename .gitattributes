@@ -1,15 +1,15 @@
 /data/*.json filter=lfs diff=lfs merge=lfs -text
 /data/*.CIF filter=lfs diff=lfs merge=lfs -text
-/data/bristol_parsed/*.*json filter=lfs diff=lfs merge=lfs -text
-/data/bristol_parsed/initial/*.*json filter=lfs diff=lfs merge=lfs -text
-/data/bristol_parsed/processed/*.*json filter=lfs diff=lfs merge=lfs -text
-/data/bristol_parsed/*.CIF filter=lfs diff=lfs merge=lfs -text
-/data/london_parsed/*.*json filter=lfs diff=lfs merge=lfs -text
-/data/london_parsed/*.*CIF filter=lfs diff=lfs merge=lfs -text
-/data/lviv_parsed/*.*json filter=lfs diff=lfs merge=lfs -text
-/data/lviv_parsed/*.csv filter=lfs diff=lfs merge=lfs -text
-/data/lviv_parsed/initial/*.*json filter=lfs diff=lfs merge=lfs -text
-/data/lviv_parsed/processed/*.*json filter=lfs diff=lfs merge=lfs -text
-/data/initial_datasets/* filter=lfs diff=lfs merge=lfs -text
-/data/lviv_static_data/* filter=lfs diff=lfs merge=lfs -text
+
+/data/city_polygons/*.geojson filter=lfs diff=lfs merge=lfs -text
+
+/data/processed_data/* filter=lfs diff=lfs merge=lfs -text
+
+/data/initial_datasets/bristol/* filter=lfs diff=lfs merge=lfs -text
+/data/initial_datasets/lviv/* filter=lfs diff=lfs merge=lfs -text
+
+/data/reparsed_datasets/lviv_parsed/*.json filter=lfs diff=lfs merge=lfs -text
+/data/reparsed_datasets/bristol_parsed/*.json filter=lfs diff=lfs merge=lfs -text
+
+
 
